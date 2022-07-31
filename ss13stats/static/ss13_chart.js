@@ -80,7 +80,6 @@ class SS13StatsChart {
 	}
 
 	format_timestamp(timestamp) {
-		console.log(timestamp)
 		var date = new Date(timestamp + 'Z') // Z indicates UTC
 
 		if (time_window == "DAY") {
