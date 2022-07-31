@@ -29,6 +29,7 @@ tracked_world_ids = []
 
 for server in Server.query.all():
 	server.player_count = 0 # reset all servers to zero so if they're not on the list they don't stay at whatever they were at
+	server.online = 0 # assume all previously tracked servers not in the hub list are offline
 
 for game in live_games:
 	server_url = game.div.div.span.nobr.text
@@ -63,6 +64,7 @@ for game in live_games:
 		db_ext.session.add(server)
 
 	server.last_seen = now
+	server.online = 1
 	server.title = title
 	server.player_count = player_count
 

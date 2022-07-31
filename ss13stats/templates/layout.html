@@ -13,6 +13,21 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 		<script src="/static/ss13_chart.js"></script>
+
+		<script>
+			function update_summary_stats() {
+				$.getJSON("/api/summary", function(data) {
+					$("#data_points_stat").text(data.data_point_count.toLocaleString("en-US"));
+					$("#unique_servers_stat").text(data.server_count.toLocaleString("en-US"));
+					$("#active_servers_stat").text(data.active_server_count.toLocaleString("en-US"));
+					$("#online_players_stat").text(data.player_count.toLocaleString("en-US"));
+					$("#last_updated_stat").text(data.last_updated.replace("T", " "));
+				})
+			}
+	
+			setInterval(update_summary_stats, 1000 * 600);
+			update_summary_stats();
+		</script>
 	</head>
 </html>
 
@@ -35,14 +50,17 @@
 			</ul>
 
 			<div class="navbar-content ml-auto">
-				<span class="navbar-text text-monospace nav-item">Made with &lt;3 by&nbsp;
-					<a class="text-muted" href="https://github.com/qwertyquerty">qwerty</a>
-				</span>
+				<span class="navbar-text text-monospace nav-item">Last updated&nbsp;<span id="last_updated_stat">...</span></span>
 			</div>
 		</nav>
 
 		<div class="content-wrapper">
 			{% block content %}
 			{% endblock %}
+
+			<div class="text-monospace text-center my-10">Made with &lt;3 by
+				<a class="text-muted" href="https://github.com/qwertyquerty">qwerty</a>
+			</div>
+		</div>
 	</div>
 </body>

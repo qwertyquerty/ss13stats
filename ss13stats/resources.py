@@ -1,6 +1,8 @@
 from ss13stats import rest_ext
 from ss13stats.db import Server, ServerSchema, GlobalStat, GlobalStatSchema, ServerStat, ServerStatSchema
 
+from datetime import datetime, timedelta
+
 from flask_apispec import MethodResource, use_kwargs, marshal_with
 
 import marshmallow
@@ -41,13 +43,19 @@ class GlobalStatsResource(MethodResource):
 class SummarySchema(Schema):
 	data_point_count = fields.Integer()
 	server_count = fields.Integer()
+	active_server_count = fields.Integer()
 	player_count = fields.Integer()
+	last_updated = fields.DateTime()
 
 class SummaryResource(MethodResource):
 	@marshal_with(SummarySchema)
 	def get(self, **kwargs):
+		most_recently_updated_server = Server.query.order_by(Server.last_seen).first()
+
 		return {
 			"data_point_count": GlobalStat.query.count() + ServerStat.query.count(),
 			"server_count": Server.query.count(),
-			"player_count": Server.query.with_entities(func.sum(Server.player_count)).scalar()
+			"active_server_count": Server.query.filter(Server.online == 1).count(),
+			"player_count": Server.query.with_entities(func.sum(Server.player_count)).scalar(),
+			"last_updated": most_recently_updated_server.last_seen if most_recently_updated_server else None
 		}

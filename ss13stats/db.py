@@ -12,13 +12,14 @@ class Server(db_ext.Model):
     last_seen = Column("last_seen", DateTime())
     title = Column("title", String(1024))
     player_count = Column("player_count", Integer())
+    online = Column("online", Integer())
 
     def byond_url(self):
         return f"byond://BYOND.world.{self.id}"
     
     @classmethod
     def get_hub_list(cls):
-        return cls.query.filter(cls.last_seen > (datetime.utcnow() - timedelta(days=7))).order_by(cls.player_count.desc())
+        return cls.query.filter().order_by(cls.online.desc(), cls.player_count.desc())
 
 
 class ServerSchema(ma_ext.SQLAlchemyAutoSchema):

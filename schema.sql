@@ -8,35 +8,14 @@
 CREATE DATABASE IF NOT EXISTS `ss13stats` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
 USE `ss13stats`;
 
-CREATE TABLE IF NOT EXISTS `global_stats` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `timestamp` datetime NOT NULL,
-  `type` enum('SERVER_COUNT','PLAYER_COUNT','FAN_COUNT') CHARACTER SET utf8mb3 COLLATE utf8_general_ci NOT NULL,
-  `value` int NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `type` (`type`),
-  KEY `value` (`value`),
-  KEY `timestamp` (`timestamp`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
 CREATE TABLE IF NOT EXISTS `servers` (
   `id` int unsigned NOT NULL,
   `first_seen` datetime NOT NULL,
   `last_seen` datetime NOT NULL,
   `title` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8_general_ci NOT NULL,
   `player_count` int DEFAULT NULL,
+  `online` tinyint NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-
-CREATE TABLE IF NOT EXISTS `server_stats` (
-  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `timestamp` datetime NOT NULL,
-  `server_id` bigint unsigned NOT NULL,
-  `player_count` bigint unsigned NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `player_count` (`player_count`),
-  KEY `server_id` (`server_id`),
-  KEY `timestamp` (`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

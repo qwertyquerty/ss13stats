@@ -4,18 +4,35 @@
 
 	<h1 class="text-center">SS13 Server Hub</h1>
 
+	<div class="text-center">
+		<span class="badge badge-primary font-size-18 m-5"><span id="active_servers_stat">...</span> Active Servers</span>
+		<span class="badge badge-primary font-size-18 m-5"><span id="online_players_stat">...</span> Online Players</span>
+	</div>
+
+	<br/>
+
 	{% for server in servers %}
-		<div class="card m-5 p-5">
-			<div class="row">
-				<div class="card-title col-11">
-					#{{ loop.index }}
-					
-					<a class="text-muted" href="/hub/{{ server.id }}">{{ server.title }}</a>
+		<div class="mx-auto w-three-quarter">
+			<div class="card m-5 p-10">
+				<div class="row">
+					<div class="card-title col-11">
+						#{{ loop.index }}
+						
+						<a class="text-muted" href="/hub/{{ server.id }}">{{ server.title }}</a>
+					</div>
+					<div class="card-title col-1 text-right">
+						<a href="{{ server.byond_url() }}" class="btn btn-primary" type="button">Join</a>
+					</div>
+
+					<div class="badge-group">
+						{% if server.online %}
+							<span class="badge badge-success">Online</span>
+							<span class="badge">{{ server.player_count }} players</span>
+						{% else %}
+							<span class="badge badge-danger">Offline</span>
+						{% endif %}
+					</div>
 				</div>
-				<div class="card-title col-1 text-right">
-					<a href="{{ server.byond_url() }}" class="btn btn-primary" type="button">Join</a>
-				</div>
-				<span class="badge badge-primary">{{ server.player_count }} players</span>
 			</div>
 		</div>
 	{% endfor %}
