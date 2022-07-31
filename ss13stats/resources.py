@@ -37,8 +37,9 @@ class GlobalStatsResource(MethodResource):
 
 
 class SummarySchema(Schema):
-	data_points_count = fields.Integer()
-	servers_count = fields.Integer()
+	data_point_count = fields.Integer()
+	server_count = fields.Integer()
+	player_count = fields.Integer()
 
 class SummaryResource(MethodResource):
 	@marshal_with(SummarySchema)
@@ -46,5 +47,5 @@ class SummaryResource(MethodResource):
 		return {
 			"data_point_count": GlobalStat.query.count() + ServerStat.query.count(),
 			"server_count": Server.query.count(),
-			"player_count": Server.query(func.sum(Server.player_count)).scalar()
+			"player_count": Server.query.with_entities(func.sum(Server.player_count)).scalar()
 		}

@@ -1,4 +1,5 @@
 from ss13stats.config import cfg
+from ss13stats.resources import *
 from ss13stats.util import *
 
 from flask import Flask, render_template, send_from_directory
@@ -50,7 +51,7 @@ def server_page(server_id):
 	return render_template("server.html", server=server)
 
 
-from ss13stats.resources import *
+
 
 rest_ext.add_resource(ServerListResource, "/api/servers")
 rest_ext.add_resource(ServerStatsResource, "/api/server_stats")
