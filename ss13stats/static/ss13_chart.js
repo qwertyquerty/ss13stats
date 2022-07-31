@@ -85,7 +85,7 @@ class SS13StatsChart {
 
 		if (time_window == "DAY") {
 			return date.toLocaleTimeString('en-US', {
-				hour12: false
+				hourCycle: 'h23'
 			}).slice(0, -3)
 		} else if (time_window == "WEEK") {
 			return date.toLocaleString('en-US', {
