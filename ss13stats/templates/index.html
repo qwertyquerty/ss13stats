@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1 class="text-center">
-	SS13 Stats
+	SS13 Global Stats
 </h1>
 <div class="text-center">
 	<span class="badge badge-primary font-size-18 m-5"><span id="data_points_stat">...</span> Data Points</span>
@@ -23,6 +23,19 @@
 	</script>
 </div>
 
+<br/>
+
+<div class="text-center">
+	<div class="btn-group" role="group" aria-label="Basic example">
+		<button id="button-time-window-DAY" class="btn btn-primary" type="button" onClick="set_time_window('DAY');">Day</button>
+		<button id="button-time-window-WEEK" class="btn" type="button" onClick="set_time_window('WEEK');">Week</button>
+		<button id="button-time-window-MONTH" class="btn" type="button" onClick="set_time_window('MONTH');">Month</button>
+		<button id="button-time-window-YEAR" class="btn" type="button" onClick="set_time_window('YEAR');">Year</button>
+		<button id="button-time-window-ALL" class="btn" type="button" onClick="set_time_window('ALL');">All Time</button>
+	</div>
+</div>
+
+
 <div class="card">
 	<h2 class="card-title text-center">Global Player Count</h2>
 	<canvas id="global_player_count_chart" height="80px"></canvas>
@@ -39,28 +52,22 @@
 </div>
 
 <script>
-	construct_chart(
+	new SS13StatsChart(
 		"global_player_count_chart",
 		"Global Player Count",
-		"/api/global_stats?type=PLAYER_COUNT",
-		entry => entry.timestamp,
-		entry => entry.value
+		"/api/global_stats?type=PLAYER_COUNT"
 	)
 
-	construct_chart(
+	new SS13StatsChart(
 		"global_server_count_chart",
 		"Global Server Count",
-		"/api/global_stats?type=SERVER_COUNT",
-		entry => entry.timestamp,
-		entry => entry.value
+		"/api/global_stats?type=SERVER_COUNT"
 	)
 
-	construct_chart(
+	new SS13StatsChart(
 		"byond_fan_count_chart",
 		"Byond Fan Count",
-		"/api/global_stats?type=FAN_COUNT",
-		entry => entry.timestamp,
-		entry => entry.value
+		"/api/global_stats?type=FAN_COUNT"
 	)
 </script>
 

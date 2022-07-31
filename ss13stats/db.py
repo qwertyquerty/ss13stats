@@ -94,7 +94,7 @@ class ServerStat(db_ext.Model):
             elif grouping == "YEAR":
                 cur = cur.group_by(func.date_format(cls.timestamp, "%Y"))
             
-            cur = cur.with_entities(cls.id, cls.timestamp, cls.type, func.avg(cls.player_count).label("player_count"))
+            cur = cur.with_entities(cls.id, cls.timestamp, cls.server_id, func.avg(cls.player_count).label("player_count"))
 
         if limit:
             cur = cur.limit(limit)

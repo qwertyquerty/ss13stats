@@ -17,23 +17,25 @@ class ServerListResource(MethodResource):
 class ServerStatsQuerySchema(Schema):
 	server_id = fields.Integer(required=True)
 	grouping = fields.String(validate=marshmallow.validate.OneOf(["HOUR", "DAY", "MONTH", "YEAR"]))
+	limit = fields.Integer()
 
 class ServerStatsResource(MethodResource):
 	@marshal_with(ServerStatSchema(many=True))
 	@use_kwargs(ServerStatsQuerySchema)
 	def get(self, **kwargs):
-		return ServerStat.query.filter(ServerStat.server_id == kwargs["server_id"]).order_by(ServerStat.timestamp.asc()).all()
+		return ServerStat.get_stats(kwargs["server_id"], grouping=kwargs.get("grouping"), limit=kwargs.get("limit"))
 
 
 class GlobalStatsQuerySchema(Schema):
 	type = fields.String(validate=marshmallow.validate.OneOf(["SERVER_COUNT", "PLAYER_COUNT", "FAN_COUNT"]), required=True)
 	grouping = fields.String(validate=marshmallow.validate.OneOf(["HOUR", "DAY", "MONTH", "YEAR"]))
+	limit = fields.Integer()
 
 class GlobalStatsResource(MethodResource):
 	@marshal_with(GlobalStatSchema(many=True))
 	@use_kwargs(GlobalStatsQuerySchema)
 	def get(self, **kwargs):
-		return GlobalStat.get_stats(kwargs["type"], grouping=kwargs.get("grouping"))
+		return GlobalStat.get_stats(kwargs["type"], grouping=kwargs.get("grouping"), limit=kwargs.get("limit"))
 
 
 class SummarySchema(Schema):

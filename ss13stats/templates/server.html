@@ -4,18 +4,28 @@
 
 <h1 class="text-center">{{ server.title }}</h1>
 
+<br/>
+
+<div class="text-center">
+	<div class="btn-group" role="group" aria-label="Basic example">
+		<button id="button-time-window-DAY" class="btn btn-primary" type="button" onClick="set_time_window('DAY');">Day</button>
+		<button id="button-time-window-WEEK" class="btn" type="button" onClick="set_time_window('WEEK');">Week</button>
+		<button id="button-time-window-MONTH" class="btn" type="button" onClick="set_time_window('MONTH');">Month</button>
+		<button id="button-time-window-YEAR" class="btn" type="button" onClick="set_time_window('YEAR');">Year</button>
+		<button id="button-time-window-ALL" class="btn" type="button" onClick="set_time_window('ALL');">All Time</button>
+	</div>
+</div>
+
 <div class="card">
 	<h2 class="card-title text-center">Player Count</h2>
 	<canvas id="server_player_count_chart" height="80px"></canvas>
 </div>
 
 <script>
-	construct_chart(
+	new SS13ServerStatsChart(
 		"server_player_count_chart",
 		"Player Count",
-		"/api/server_stats?server_id={{ server.id }}",
-		entry => entry.timestamp,
-		entry => entry.player_count
+		"/api/server_stats?server_id={{ server.id }}"
 	)
 </script>
 
