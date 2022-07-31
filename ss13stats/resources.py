@@ -63,7 +63,7 @@ class SummarySchema(Schema):
 class SummaryResource(MethodResource):
 	@marshal_with(SummarySchema)
 	def get(self, **kwargs):
-		most_recently_updated_server = Server.query.order_by(Server.last_seen).first()
+		most_recently_updated_server = Server.query.order_by(Server.last_seen.desc()).first()
 
 		return {
 			"data_point_count": GlobalStat.query.count() + ServerStat.query.count(),
