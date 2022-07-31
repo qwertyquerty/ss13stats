@@ -11,7 +11,7 @@ import requests
 BYOND_GAME_URL = "http://www.byond.com/games/Exadv1/SpaceStation13"
 
 # Sorry for whoever has to deal with this regex in the future
-PLAYER_COUNT_REGEX = re.compile(r" ([0-9]{1,3}|No) players?(?:\.|(?s:.*)\[See list\])")
+PLAYER_COUNT_REGEX = re.compile(r" ([0-9]{1,3}|No) players?(?:\.|[\s]*\[See list\])")
 
 document = requests.get(BYOND_GAME_URL).text
 
@@ -25,6 +25,8 @@ live_games = soup.find_all("div", class_="live_game_entry")
 
 total_player_count = 0
 
+tracked_world_ids = []
+
 for server in Server.query.all():
 	server.player_count = 0 # reset all servers to zero so if they're not on the list they don't stay at whatever they were at
 
@@ -32,6 +34,11 @@ for game in live_games:
 	server_url = game.div.div.span.nobr.text
 
 	server_id = int(server_url.split(".")[-1])
+
+	if server_id in tracked_world_ids: # to ignore stupid byond hub ghost server duplicates
+		continue
+
+	tracked_world_ids.append(server_id)
 
 	player_count_parse = PLAYER_COUNT_REGEX.search(game.div.div.text).groups(0)[0]
 
