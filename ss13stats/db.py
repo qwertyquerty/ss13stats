@@ -87,7 +87,7 @@ class ServerStat(db_ext.Model):
         
         if grouping:
             if grouping == "HOUR":
-                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %-H"))
+                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %h"))
             elif grouping == "DAY":
                 cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d"))
             elif grouping == "MONTH":
