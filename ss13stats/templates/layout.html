@@ -21,7 +21,7 @@
 					$("#unique_servers_stat").text(data.server_count.toLocaleString("en-US"));
 					$("#active_servers_stat").text(data.active_server_count.toLocaleString("en-US"));
 					$("#online_players_stat").text(data.player_count.toLocaleString("en-US"));
-					$("#last_updated_stat").text(data.last_updated.replace("T", " "));
+					$("#last_updated_stat").text(new Date(data.last_updated+"Z").toLocaleString('en-US', {hourCycle: 'h23'}).slice(0, -3));
 				})
 			}
 	
