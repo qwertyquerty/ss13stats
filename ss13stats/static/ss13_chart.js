@@ -49,7 +49,7 @@ class SS13StatsChart {
 				scales: {
 					x: {
 						ticks: {
-							display: false
+							display: true
 						}
 				   }
 				}
@@ -74,9 +74,30 @@ class SS13StatsChart {
 	}
 
 	load_data(data) {
-		this.chart.data.labels = data.map(entry => entry.timestamp);
+		this.chart.data.labels = data.map(entry => this.format_timestamp(entry.timestamp));
 		this.chart.data.datasets[0].data = data.map(entry => entry.value);
 		this.chart.update();
+	}
+
+	format_timestamp(timestamp) {
+		console.log(timestamp)
+		var date = new Date(timestamp + 'Z') // Z indicates UTC
+
+		if (time_window == "DAY") {
+			return date.toLocaleTimeString('en-US', {
+				hour12: false
+			}).slice(0, -3)
+		} else if (time_window == "WEEK") {
+			return date.toLocaleString('en-US', {
+				hourCycle: 'h23'
+			}).slice(0, -3).replace(",", "")
+		} else if (time_window == "MONTH") {
+			return date.toLocaleDateString('en-US', {timeZone: "UTC"})
+		} else if (time_window == "YEAR") {
+			return date.toLocaleString('en-US', { month: 'long', timeZone: "UTC"});
+		} else if (time_window == "ALL") {
+			return date.getUTCFullYear();
+		}
 	}
 
 	clear() {
