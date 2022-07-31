@@ -40,6 +40,19 @@ class GlobalStatsResource(MethodResource):
 		return GlobalStat.get_stats(kwargs["type"], grouping=kwargs.get("grouping"), limit=kwargs.get("limit"))
 
 
+class GlobalWeekdayAveragesResource(MethodResource):
+	@marshal_with(GlobalStatSchema(many=True))
+	def get(self, **kwargs):
+		return GlobalStat.get_weekday_averages()
+
+
+class ServerWeekdayAveragesResource(MethodResource):
+	@marshal_with(ServerStatSchema(many=True))
+	@use_kwargs(ServerStatsQuerySchema)
+	def get(self, **kwargs):
+		return ServerStat.get_weekday_averages(kwargs["server_id"])
+
+
 class SummarySchema(Schema):
 	data_point_count = fields.Integer()
 	server_count = fields.Integer()

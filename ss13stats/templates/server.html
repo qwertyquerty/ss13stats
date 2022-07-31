@@ -21,11 +21,22 @@
 	<canvas id="server_player_count_chart" height="80px"></canvas>
 </div>
 
+<div class="card">
+	<h2 class="card-title text-center">Weekday Player Count</h2>
+	<canvas id="server_weekday_averages_chart" height="80px"></canvas>
+</div>
+
 <script>
 	new SS13ServerStatsChart(
 		"server_player_count_chart",
 		"Player Count",
 		"/api/server_stats?server_id={{ server.id }}"
+	)
+
+	new SS13ServerWeekdayAverages(
+		"server_weekday_averages_chart",
+		"Weekday Averages",
+		"/api/server_weekdays?server_id={{ server.id }}"
 	)
 </script>
 
