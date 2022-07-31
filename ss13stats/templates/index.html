@@ -34,6 +34,11 @@
 </div>
 
 <div class="card">
+	<h2 class="card-title text-center">Hourly Player Count Averages</h2>
+	<canvas id="global_hourly_averages_chart" height="80px"></canvas>
+</div>
+
+<div class="card">
 	<h2 class="card-title text-center">Global Server Count</h2>
 	<canvas id="global_server_count_chart" height="80px"></canvas>
 </div>
@@ -50,10 +55,16 @@
 		"/api/global_stats?type=PLAYER_COUNT"
 	)
 
-	new SS13GlobalWeekdayAverages(
+	new SS13GlobalWeekdayAveragesChart(
 		"global_weekday_averages_chart",
 		"Global Weekday Averages",
 		"/api/global_weekdays"
+	)
+
+	new SS13GlobalHourlyAveragesChart(
+		"global_hourly_averages_chart",
+		"Global Hourly Averages",
+		"/api/global_hours"
 	)
 
 	new SS13StatsChart(

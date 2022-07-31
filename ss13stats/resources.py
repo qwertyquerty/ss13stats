@@ -53,6 +53,20 @@ class ServerWeekdayAveragesResource(MethodResource):
 		return ServerStat.get_weekday_averages(kwargs["server_id"])
 
 
+class GlobalHourlyAveragesResource(MethodResource):
+	@marshal_with(GlobalStatSchema(many=True))
+	def get(self, **kwargs):
+		return GlobalStat.get_hourly_averages()
+
+
+class ServerHourlyAveragesResource(MethodResource):
+	@marshal_with(ServerStatSchema(many=True))
+	@use_kwargs(ServerStatsQuerySchema)
+	def get(self, **kwargs):
+		return ServerStat.get_hourly_averages(kwargs["server_id"])
+
+
+
 class SummarySchema(Schema):
 	data_point_count = fields.Integer()
 	server_count = fields.Integer()

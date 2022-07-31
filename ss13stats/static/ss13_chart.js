@@ -151,7 +151,7 @@ class SS13ServerStatsChart extends SS13StatsChart {
 	static value_key = "player_count";
 }
 
-class SS13GlobalWeekdayAverages extends SS13StatsChart {
+class SS13GlobalWeekdayAveragesChart extends SS13StatsChart {
 	static chart_type = "bar";
 	static trend_line = false;
 	static value_key = "value";
@@ -166,6 +166,19 @@ class SS13GlobalWeekdayAverages extends SS13StatsChart {
 	}
 }
 
-class SS13ServerWeekdayAverages extends SS13GlobalWeekdayAverages {
+class SS13ServerWeekdayAveragesChart extends SS13GlobalWeekdayAveragesChart {
+	static value_key = "player_count";
+}
+
+class SS13GlobalHourlyAveragesChart extends SS13GlobalWeekdayAveragesChart {
+	format_timestamp(timestamp) {
+		var date = new Date(timestamp + 'Z'); // Z indicates UTC
+		return date.toLocaleTimeString('en-US', {
+			hourCycle: 'h23'
+		}).slice(0, -3);
+	}
+}
+
+class SS13ServerHourlyAveragesChart extends SS13GlobalHourlyAveragesChart {
 	static value_key = "player_count";
 }

@@ -22,8 +22,13 @@
 </div>
 
 <div class="card">
-	<h2 class="card-title text-center">Weekday Player Count</h2>
+	<h2 class="card-title text-center">Weekday Player Count Averages</h2>
 	<canvas id="server_weekday_averages_chart" height="80px"></canvas>
+</div>
+
+<div class="card">
+	<h2 class="card-title text-center">Hourly Player Count Averages</h2>
+	<canvas id="server_hourly_averages_chart" height="80px"></canvas>
 </div>
 
 <script>
@@ -33,10 +38,16 @@
 		"/api/server_stats?server_id={{ server.id }}"
 	)
 
-	new SS13ServerWeekdayAverages(
+	new SS13ServerWeekdayAveragesChart(
 		"server_weekday_averages_chart",
 		"Weekday Averages",
 		"/api/server_weekdays?server_id={{ server.id }}"
+	)
+
+	new SS13ServerHourlyAveragesChart(
+		"server_hourly_averages_chart",
+		"Hourly Averages",
+		"/api/server_hours?server_id={{ server.id }}"
 	)
 </script>
 

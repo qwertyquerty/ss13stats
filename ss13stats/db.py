@@ -66,7 +66,15 @@ class GlobalStat(db_ext.Model):
     def get_weekday_averages(cls):
         cur = cls.query.filter(cls.type == "PLAYER_COUNT").group_by(func.date_format(cls.timestamp, "%w"))
         cur = cur.with_entities(cls.id, cls.timestamp, cls.type, func.avg(cls.value).label("value"))
-        cur = cur.order_by(cls.timestamp.asc())
+        cur = cur.order_by(func.date_format(cls.timestamp, "%w").asc())
+
+        return cur.all()
+
+    @classmethod
+    def get_hourly_averages(cls):
+        cur = cls.query.filter(cls.type == "PLAYER_COUNT").group_by(func.date_format(cls.timestamp, "%H"))
+        cur = cur.with_entities(cls.id, func.min(cls.timestamp).label("timestamp"), cls.type, func.avg(cls.value).label("value"))
+        cur = cur.order_by(func.date_format(cls.timestamp, "%H").asc())
 
         return cur.all()
 
@@ -113,6 +121,14 @@ class ServerStat(db_ext.Model):
     @classmethod
     def get_weekday_averages(cls, server_id):
         cur = cls.query.filter(cls.server_id == server_id).group_by(func.date_format(cls.timestamp, "%w"))
+        cur = cur.with_entities(cls.id, cls.timestamp, cls.server_id, func.avg(cls.player_count).label("player_count"))
+        cur = cur.order_by(cls.timestamp.asc())
+
+        return cur.all()
+
+    @classmethod
+    def get_hourly_averages(cls, server_id):
+        cur = cls.query.filter(cls.server_id == server_id).group_by(func.date_format(cls.timestamp, "%H"))
         cur = cur.with_entities(cls.id, cls.timestamp, cls.server_id, func.avg(cls.player_count).label("player_count"))
         cur = cur.order_by(cls.timestamp.asc())
 
