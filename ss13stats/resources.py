@@ -6,6 +6,7 @@ from flask_apispec import MethodResource, use_kwargs, marshal_with
 import marshmallow
 from marshmallow import Schema, fields
 
+from sqlalchemy import func
 
 class ServerListResource(MethodResource):
 	@marshal_with(ServerSchema(many=True))
@@ -43,6 +44,7 @@ class SummaryResource(MethodResource):
 	@marshal_with(SummarySchema)
 	def get(self, **kwargs):
 		return {
-			"data_points_count": GlobalStat.query.count() + ServerStat.query.count(),
-			"servers_count": Server.query.count()
+			"data_point_count": GlobalStat.query.count() + ServerStat.query.count(),
+			"server_count": Server.query.count(),
+			"player_count": Server.query(func.sum(Server.player_count)).scalar()
 		}

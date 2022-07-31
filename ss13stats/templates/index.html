@@ -7,12 +7,14 @@
 <div class="text-center">
 	<span class="badge badge-primary font-size-18 m-5"><span id="data_points_stat">...</span> Data Points</span>
 	<span class="badge badge-primary font-size-18 m-5"><span id="unique_servers_stat">...</span> Unique Servers</span>
+	<span class="badge badge-primary font-size-18 m-5"><span id="online_players_stat">...</span> Online Players</span>
 
 	<script>
 		function update_summary_stats() {
 			$.getJSON("/api/summary", function(data) {
-				$("#data_points_stat").text(data.data_points_count.toLocaleString("en-US"));
-				$("#unique_servers_stat").text(data.servers_count.toLocaleString("en-US"));
+				$("#data_points_stat").text(data.data_point_count.toLocaleString("en-US"));
+				$("#unique_servers_stat").text(data.server_count.toLocaleString("en-US"));
+				$("#online_players_stat").text(data.player_count.toLocaleString("en-US"));
 			})
 		}
 
