@@ -1,0 +1,48 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card">
+	<h2 class="card-title text-center">Global Player Count</h2>
+	<canvas id="global_player_count_chart" height="80px"></canvas>
+</div>
+
+<div class="card">
+	<h2 class="card-title text-center">Global Server Count</h2>
+	<canvas id="global_server_count_chart" height="80px"></canvas>
+</div>
+
+<div class="card">
+	<h2 class="card-title text-center">Byond Fan Count</h2>
+	<canvas id="byond_fan_count_chart" height="80px"></canvas>
+</div>
+
+
+
+<script>
+	construct_chart(
+		"global_player_count_chart",
+		"Global Player Count",
+		"/global_stats?type=PLAYER_COUNT",
+		entry => entry.timestamp,
+		entry => entry.value
+	)
+
+	construct_chart(
+		"global_server_count_chart",
+		"Global Server Count",
+		"/global_stats?type=SERVER_COUNT",
+		entry => entry.timestamp,
+		entry => entry.value
+	)
+
+	construct_chart(
+		"byond_fan_count_chart",
+		"Byond Fan Count",
+		"/global_stats?type=FAN_COUNT",
+		entry => entry.timestamp,
+		entry => entry.value
+	)
+</script>
+
+{% endblock %}
+

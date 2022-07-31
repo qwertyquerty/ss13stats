@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h1 class="text-center">{{ server.title }}</h1>
+
+<div class="card">
+	<h2 class="card-title text-center">Player Count</h2>
+	<canvas id="server_player_count_chart" height="80px"></canvas>
+</div>
+
+<script>
+	construct_chart(
+		"server_player_count_chart",
+		"Player Count",
+		"/server_stats?server_id={{ server.id }}",
+		entry => entry.timestamp,
+		entry => entry.player_count
+	)
+</script>
+
+{% endblock %}
+

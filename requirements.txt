@@ -1,0 +1,13 @@
+bs4
+dash
+envyaml
+Flask
+flask-apispec
+flask-marshmallow
+flask-restful
+flask-sqlalchemy
+marshmallow-sqlalchemy
+mysql-connector-python
+python-dotenv
+requests
+werkzeug==2.1.2
