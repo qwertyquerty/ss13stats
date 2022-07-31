@@ -23,7 +23,7 @@ function update_all_charts() {
 }
 
 class SS13StatsChart {
-	constructor(canvas_id, title, endpoint, refresh_rate=600) {
+	constructor(canvas_id, title, endpoint, refresh_rate=60) {
 		this.canvas_id = canvas_id;
 		this.title = title;
 		this.endpoint = endpoint;
