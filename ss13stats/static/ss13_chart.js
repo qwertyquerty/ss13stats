@@ -22,16 +22,19 @@ function update_all_charts() {
 	}
 }
 
+$(document).ready(function() {
+	setInterval(update_all_charts, 60 * 1000);
+})
+
 class SS13StatsChart {
 	static chart_type = "line";
 	static trend_line = true;
 	static value_key = "value";
 
-	constructor(canvas_id, title, endpoint, refresh_rate=60) {
+	constructor(canvas_id, title, endpoint) {
 		this.canvas_id = canvas_id;
 		this.title = title;
 		this.endpoint = endpoint;
-		this.refresh_rate = refresh_rate;
 
 		let chart_options = {
 			type: this.constructor.chart_type,
@@ -67,8 +70,6 @@ class SS13StatsChart {
 		this.chart = new Chart(document.getElementById(this.canvas_id), chart_options);
 
 		this.update();
-
-		setInterval(this.update, this.refresh_rate * 1000);
 
 		stats_charts.push(this);
 	}
