@@ -47,7 +47,7 @@ class GlobalStat(db_ext.Model):
         
         if grouping:
             if grouping == "HOUR":
-                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %h"))
+                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %H"))
             elif grouping == "DAY":
                 cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d"))
             elif grouping == "MONTH":
@@ -95,7 +95,7 @@ class ServerStat(db_ext.Model):
         
         if grouping:
             if grouping == "HOUR":
-                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %h"))
+                cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d %H"))
             elif grouping == "DAY":
                 cur = cur.group_by(func.date_format(cls.timestamp, "%Y-%m-%d"))
             elif grouping == "MONTH":
