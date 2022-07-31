@@ -25,6 +25,9 @@ live_games = soup.find_all("div", class_="live_game_entry")
 
 total_player_count = 0
 
+for server in Server.query.all():
+	server.player_count = 0 # reset all servers to zero so if they're not on the list they don't stay at whatever they were at
+
 for game in live_games:
 	server_url = game.div.div.span.nobr.text
 

@@ -52,6 +52,7 @@ def server_page(server_id):
 
 from ss13stats.resources import *
 
-rest_ext.add_resource(ServerListResource, "/servers")
-rest_ext.add_resource(ServerStatsResource, "/server_stats")
-rest_ext.add_resource(GlobalStatsResource, "/global_stats")
+rest_ext.add_resource(ServerListResource, "/api/servers")
+rest_ext.add_resource(ServerStatsResource, "/api/server_stats")
+rest_ext.add_resource(GlobalStatsResource, "/api/global_stats")
+rest_ext.add_resource(SummaryResource, "/api/summary")

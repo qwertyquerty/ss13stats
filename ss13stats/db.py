@@ -18,7 +18,7 @@ class Server(db_ext.Model):
     
     @classmethod
     def get_hub_list(cls):
-        return cls.query.filter(cls.last_seen > (datetime.utcnow() - timedelta(minutes=10))).order_by(cls.player_count.desc())
+        return cls.query.filter(cls.last_seen > (datetime.utcnow() - timedelta(days=7))).order_by(cls.player_count.desc())
 
 
 class ServerSchema(ma_ext.SQLAlchemyAutoSchema):

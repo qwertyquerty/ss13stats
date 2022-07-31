@@ -33,3 +33,16 @@ class GlobalStatsResource(MethodResource):
 	@use_kwargs(GlobalStatsQuerySchema)
 	def get(self, **kwargs):
 		return GlobalStat.get_stats(kwargs["type"], grouping=kwargs.get("grouping"))
+
+
+class SummarySchema(Schema):
+	data_points_count = fields.Integer()
+	servers_count = fields.Integer()
+
+class SummaryResource(MethodResource):
+	@marshal_with(SummarySchema)
+	def get(self, **kwargs):
+		return {
+			"data_points_count": GlobalStat.query.count() + ServerStat.query.count(),
+			"servers_count": Server.query.count()
+		}

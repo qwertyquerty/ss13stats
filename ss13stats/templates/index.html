@@ -1,6 +1,26 @@
 {% extends "layout.html" %}
 
 {% block content %}
+<h1 class="text-center">
+	SS13 Stats
+</h1>
+<div class="text-center">
+	<span class="badge badge-primary font-size-18 m-5"><span id="data_points_stat">...</span> Data Points</span>
+	<span class="badge badge-primary font-size-18 m-5"><span id="unique_servers_stat">...</span> Unique Servers</span>
+
+	<script>
+		function update_summary_stats() {
+			$.getJSON("/api/summary", function(data) {
+				$("#data_points_stat").text(data.data_points_count.toLocaleString("en-US"));
+				$("#unique_servers_stat").text(data.servers_count.toLocaleString("en-US"));
+			})
+		}
+
+		setInterval(update_summary_stats, 1000 * 600);
+		update_summary_stats();
+	</script>
+</div>
+
 <div class="card">
 	<h2 class="card-title text-center">Global Player Count</h2>
 	<canvas id="global_player_count_chart" height="80px"></canvas>
@@ -16,13 +36,11 @@
 	<canvas id="byond_fan_count_chart" height="80px"></canvas>
 </div>
 
-
-
 <script>
 	construct_chart(
 		"global_player_count_chart",
 		"Global Player Count",
-		"/global_stats?type=PLAYER_COUNT",
+		"/api/global_stats?type=PLAYER_COUNT",
 		entry => entry.timestamp,
 		entry => entry.value
 	)
@@ -30,7 +48,7 @@
 	construct_chart(
 		"global_server_count_chart",
 		"Global Server Count",
-		"/global_stats?type=SERVER_COUNT",
+		"/api/global_stats?type=SERVER_COUNT",
 		entry => entry.timestamp,
 		entry => entry.value
 	)
@@ -38,7 +56,7 @@
 	construct_chart(
 		"byond_fan_count_chart",
 		"Byond Fan Count",
-		"/global_stats?type=FAN_COUNT",
+		"/api/global_stats?type=FAN_COUNT",
 		entry => entry.timestamp,
 		entry => entry.value
 	)
