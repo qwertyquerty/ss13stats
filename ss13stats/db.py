@@ -37,7 +37,7 @@ class GlobalStat(db_ext.Model):
 
     @classmethod
     def get_stats(cls, type, start=None, end=None, grouping=None, limit=None):
-        cur = cls.query.filter(cls.type == type).order_by(cls.timestamp.asc())
+        cur = cls.query.filter(cls.type == type).order_by(cls.timestamp.desc())
 
         if start:
             cur = cur.filter(cls.timestamp >= start)
@@ -60,7 +60,7 @@ class GlobalStat(db_ext.Model):
         if limit:
             cur = cur.limit(limit)
 
-        return cur.all()
+        return cur.all()[::-1] # reverse here so we can grab the last n items with limit
     
     @classmethod
     def get_weekday_averages(cls):
@@ -85,7 +85,7 @@ class ServerStat(db_ext.Model):
 
     @classmethod
     def get_stats(cls, server_id, start=None, end=None, grouping=None, limit=None):
-        cur = cls.query.filter(cls.server_id == server_id).order_by(cls.timestamp.asc())
+        cur = cls.query.filter(cls.server_id == server_id).order_by(cls.timestamp.desc())
 
         if start:
             cur = cur.filter(cls.timestamp >= start)
@@ -108,7 +108,7 @@ class ServerStat(db_ext.Model):
         if limit:
             cur = cur.limit(limit)
 
-        return cur.all()
+        return cur.all()[::-1] 
 
     @classmethod
     def get_weekday_averages(cls, server_id):
