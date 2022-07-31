@@ -141,7 +141,7 @@ class SS13StatsChart {
 
 class SS13ServerStatsChart extends SS13StatsChart {
 	load_data(data) {
-		this.chart.data.labels = data.map(entry => entry.timestamp);
+		this.chart.data.labels = data.map(entry => this.format_timestamp(entry.timestamp));
 		this.chart.data.datasets[0].data = data.map(entry => entry.player_count);
 		this.chart.update();
 	}
