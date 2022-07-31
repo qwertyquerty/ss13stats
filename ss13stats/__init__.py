@@ -1,5 +1,4 @@
 from ss13stats.config import cfg
-from ss13stats.resources import *
 from ss13stats.util import *
 
 from flask import Flask, render_template, send_from_directory
@@ -25,6 +24,8 @@ ma_ext = Marshmallow(flask)
 rest_ext = Api(flask)
 
 parser.location = "query"
+
+from ss13stats.resources import *
 
 @parser.error_handler
 def handle_request_parsing_error(err, req, schema, *, error_status_code, error_headers):
