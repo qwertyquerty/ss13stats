@@ -7,7 +7,8 @@ from sqlalchemy import Column, Integer, DateTime, String, Enum, func
 class Server(db_ext.Model):
     __tablename__ = "servers"
 
-    id = Column("id", String(256), primary_key=True)
+    id = Column("id", Integer(), primary_key=True)
+    address = Column("address", String(256))
     first_seen = Column("first_seen", DateTime())
     last_seen = Column("last_seen", DateTime())
     title = Column("title", String(1024))
@@ -17,6 +18,10 @@ class Server(db_ext.Model):
     @classmethod
     def get_hub_list(cls):
         return cls.query.filter().order_by(cls.online.desc(), cls.player_count.desc())
+    
+    @classmethod
+    def from_address(cls, address):
+        return cls.query.filter(cls.address == address).one_or_none()
 
 
 class ServerSchema(ma_ext.SQLAlchemyAutoSchema):
@@ -85,7 +90,7 @@ class ServerStat(db_ext.Model):
 
     id = Column("id", Integer(), primary_key=True)
     timestamp = Column("timestamp", DateTime())
-    server_id = Column("server_id", String(256))
+    server_id = Column("server_id", Integer())
     player_count = Column("player_count", Integer())
 
     @classmethod

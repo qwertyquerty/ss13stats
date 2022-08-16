@@ -18,10 +18,10 @@
 					<div class="card-title col-11">
 						#{{ loop.index }}
 						
-						<a class="text-muted" href="/hub/{{ server.id }}">{{ server.title }}</a>
+						<a class="text-muted" href="/hub/{{ server.id }}">{{ server.title or server.address }}</a>
 					</div>
 					<div class="card-title col-1 text-right">
-						<a href="{{ server.id }}" class="btn btn-primary" type="button">Join</a>
+						<a href="{{ server.address }}" class="btn btn-primary" type="button">Join</a>
 					</div>
 
 					<div class="badge-group">

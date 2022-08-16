@@ -47,28 +47,32 @@ for game in live_games:
 		status_url = http_addr.rstrip("/") + "/status"
 
 		game_stats = requests.get(status_url, timeout=2).json()
+		
 		if game_stats:
+			title = game_stats["name"]
 			player_count = game_stats["players"]
 			online = 1
 	
 	except:
 		pass
 
-	server = Server.query.get(game["address"])
+	server = Server.from_address(game["address"])
 
 	if not online:
 		player_count = 0
 
 	if not server:
 		server = Server(
-			id = addr,
+			address = addr,
 			first_seen = now,
 			last_seen = now,
 			title = title,
-			player_count = player_count
+			player_count = player_count,
+			online = online
 		)
 
 		db_ext.session.add(server)
+		db_ext.session.flush()
 
 	server.last_seen = now
 	server.online = online
@@ -78,7 +82,7 @@ for game in live_games:
 	if online:
 		server_stat = ServerStat(
 			timestamp = now,
-			server_id = addr,
+			server_id = server.id,
 			player_count = player_count
 		)
 
