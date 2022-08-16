@@ -182,3 +182,148 @@ class SS13GlobalHourlyAveragesChart extends SS13GlobalWeekdayAveragesChart {
 class SS13ServerHourlyAveragesChart extends SS13GlobalHourlyAveragesChart {
 	static value_key = "player_count";
 }
+
+
+
+
+class SS13FlippeningChart {
+	static chart_type = "line";
+	static trend_line = true;
+	static value_key = "value";
+
+	constructor(canvas_id, title0, title1, endpoint0, endpoint1) {
+		this.canvas_id = canvas_id;
+		this.title1 = title0;
+		this.endpoint1 = endpoint0;
+		this.titke2 = title1;
+		this.endpoint2 = endpoint1;
+
+		let chart_options = {
+			type: this.constructor.chart_type,
+			data: {
+				labels: [],
+				datasets: [{
+					label: this.title0,
+					data: [],
+					borderColor: "#00ff00aa",
+					borderWidth: 2
+				},
+				{
+					label: this.title1,
+					data: [],
+					borderColor: "#0000ffaa",
+					borderWidth: 2
+				}]
+			},
+			options: {
+				responsive: true,
+				scales: {
+					x: {
+						ticks: {
+							display: true
+						}
+				   }
+				}
+			}
+		}
+
+		if (this.constructor.trend_line) {
+			chart_options.data.datasets[0].trendlineLinear = {
+				style: "#ff0000aa",
+				lineStyle: "dotted",
+				width: 2
+			}
+
+			chart_options.data.datasets[1].trendlineLinear = {
+				style: "#ff0000aa",
+				lineStyle: "dotted",
+				width: 2
+			}
+		}
+
+		this.chart = new Chart(document.getElementById(this.canvas_id), chart_options);
+
+		this.update();
+
+		stats_charts.push(this);
+	}
+
+	update() {
+		var stats_chart = this; // omg i love js scope
+
+		$.getJSON(this.generate_endpoint(this.endpoint0), function(data) {
+			stats_chart.load_data(0, data);
+		})
+
+		$.getJSON(this.generate_endpoint(this.endpoint1), function(data) {
+			stats_chart.load_data(1, data);
+		})
+	}
+
+	load_data(dataset, data) {
+		this.chart.data.labels = data.map(entry => this.format_timestamp(entry.timestamp));
+		this.chart.data.datasets[dataset].data = data.map(entry => entry[this.constructor.value_key]);
+		this.chart.update();
+	}
+
+	format_timestamp(timestamp) {
+		var date = new Date(timestamp + 'Z'); // Z indicates UTC
+
+		if (time_window == "DAY") {
+			return date.toLocaleTimeString('en-US', {
+				hourCycle: 'h23'
+			}).slice(0, -3);
+		} else if (time_window == "WEEK") {
+			return date.toLocaleString('en-US', {
+				hourCycle: 'h23'
+			}).slice(0, -3).replace(",", "");
+		} else if (time_window == "MONTH") {
+			return date.toLocaleDateString('en-US', {timeZone: "UTC"});
+		} else if (time_window == "YEAR") {
+			return date.toLocaleString('en-US', { month: 'long', timeZone: "UTC"});
+		} else if (time_window == "ALL") {
+			return date.getUTCFullYear();
+		}
+	}
+
+	clear() {
+		this.chart.data.labels = [];
+		for (dataset in this.chart.data.datasets) {
+			this.chart.data.datasets[dataset].data = [];
+		}
+		
+		this.chart.update();
+	}
+
+	generate_endpoint(base) {
+		var grouping;
+		var limit;
+
+		if (time_window == "DAY") {
+			limit = 144;
+		} else if (time_window == "WEEK") {
+			grouping = "HOUR";
+			limit = 168;
+		} else if (time_window == "MONTH") {
+			grouping = "DAY";
+			limit = 30;
+		} else if (time_window == "YEAR") {
+			grouping = "MONTH";
+			limit = 12;
+		} else if (time_window == "ALL") {
+			grouping = "YEAR"
+		}
+
+		var generated_endpoint = base;
+
+		if (grouping) {
+			generated_endpoint += `&grouping=${grouping}`;
+		}
+
+		if (limit) {
+			generated_endpoint += `&limit=${limit}`;
+		}
+
+		return generated_endpoint;
+	}
+}
