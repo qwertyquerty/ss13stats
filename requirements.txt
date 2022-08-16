@@ -8,4 +8,5 @@ marshmallow-sqlalchemy
 mysql-connector-python
 python-dotenv
 requests
+scikit-learn
 werkzeug==2.1.2
