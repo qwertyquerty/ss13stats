@@ -51,7 +51,10 @@ def server_page(server_id):
 
 	return render_template("server.html", server=server)
 
-
+@flask.after_request
+def after_request(response):
+    response.access_control_allow_origin = "*"
+    return response
 
 
 rest_ext.add_resource(ServerListResource, "/api/servers")
