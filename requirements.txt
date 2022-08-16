@@ -1,5 +1,3 @@
-bs4
-dash
 envyaml
 Flask
 flask-apispec

@@ -5,11 +5,11 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE DATABASE IF NOT EXISTS `ss13stats` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `ss13stats`;
+CREATE DATABASE IF NOT EXISTS `ss14stats` /*!40100 DEFAULT CHARACTER SET utf8mb3 */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `ss14stats`;
 
 CREATE TABLE IF NOT EXISTS `servers` (
-  `id` int unsigned NOT NULL,
+  `url` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8_general_ci NOT NULL,
   `first_seen` datetime NOT NULL,
   `last_seen` datetime NOT NULL,
   `title` varchar(1024) CHARACTER SET utf8mb3 COLLATE utf8_general_ci NOT NULL,

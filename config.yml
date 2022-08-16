@@ -1,9 +1,9 @@
 website:
-  port: 2213
+  port: 2214
 
 db:
-  host: $SS13_STATS_DB_HOST
-  port: $SS13_STATS_DB_PORT
-  user: $SS13_STATS_DB_USER
-  pass: $SS13_STATS_DB_PASS
-  name: $SS13_STATS_DB_NAME
+  host: $SS14_STATS_DB_HOST
+  port: $SS14_STATS_DB_PORT
+  user: $SS14_STATS_DB_USER
+  pass: $SS14_STATS_DB_PASS
+  name: $SS14_STATS_DB_NAME

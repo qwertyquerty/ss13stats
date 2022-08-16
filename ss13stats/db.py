@@ -7,15 +7,12 @@ from sqlalchemy import Column, Integer, DateTime, String, Enum, func
 class Server(db_ext.Model):
     __tablename__ = "servers"
 
-    id = Column("id", Integer(), primary_key=True)
+    id = Column("id", String(256), primary_key=True)
     first_seen = Column("first_seen", DateTime())
     last_seen = Column("last_seen", DateTime())
     title = Column("title", String(1024))
     player_count = Column("player_count", Integer())
     online = Column("online", Integer())
-
-    def byond_url(self):
-        return f"byond://BYOND.world.{self.id}"
     
     @classmethod
     def get_hub_list(cls):
@@ -32,7 +29,7 @@ class GlobalStat(db_ext.Model):
 
     id = Column("id", Integer(), primary_key=True)
     timestamp = Column("timestamp", DateTime())
-    type = Column("type", Enum("SERVER_COUNT", "PLAYER_COUNT", "FAN_COUNT"))
+    type = Column("type", Enum("SERVER_COUNT", "PLAYER_COUNT"))
     value = Column("value", Integer())
 
     @classmethod
@@ -88,7 +85,7 @@ class ServerStat(db_ext.Model):
 
     id = Column("id", Integer(), primary_key=True)
     timestamp = Column("timestamp", DateTime())
-    server_id = Column("server_id", Integer())
+    server_id = Column("server_id", String(256))
     player_count = Column("player_count", Integer())
 
     @classmethod
