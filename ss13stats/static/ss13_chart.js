@@ -193,10 +193,10 @@ class SS13FlippeningChart {
 
 	constructor(canvas_id, title0, title1, endpoint0, endpoint1) {
 		this.canvas_id = canvas_id;
-		this.title1 = title0;
-		this.endpoint1 = endpoint0;
-		this.titke2 = title1;
-		this.endpoint2 = endpoint1;
+		this.title0 = title0;
+		this.endpoint0 = endpoint0;
+		this.titke1 = title1;
+		this.endpoint1 = endpoint1;
 
 		let chart_options = {
 			type: this.constructor.chart_type,
