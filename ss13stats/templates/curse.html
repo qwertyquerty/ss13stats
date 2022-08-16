@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h1 class="text-center">
+	Breaking The Curse
+</h1>
+
+<h3 class="text-center text-muted text-monospace">
+	The curse will be broken&nbsp;<span class="text-reset" id="curse_prediction">...</span>
+</h3>
+
+<div class="card">
+	<h2 class="card-title text-center">Player Count Comparison</h2>
+	<canvas id="curse_chart" height="80px"></canvas>
+</div>
+
+<script>
+	new SS13CurseChart(
+		"curse_chart",
+		"SS14 Player Count",
+		"SS13 Player Count",
+		"/api/curse"
+	)
+</script>
+
+{% endblock %}
+

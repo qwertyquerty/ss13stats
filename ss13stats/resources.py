@@ -1,3 +1,4 @@
+from decimal import DivisionByZero
 from ss13stats import rest_ext
 from ss13stats.db import Server, ServerSchema, GlobalStat, GlobalStatSchema, ServerStat, ServerStatSchema
 
@@ -38,6 +39,40 @@ class GlobalStatsResource(MethodResource):
 	@use_kwargs(GlobalStatsQuerySchema)
 	def get(self, **kwargs):
 		return GlobalStat.get_stats(kwargs["type"], grouping=kwargs.get("grouping"), limit=kwargs.get("limit"))
+
+
+
+class CurseResource(MethodResource):
+	def get(self, **kwargs):
+		import requests
+		from flask import jsonify
+		from sklearn.linear_model import LinearRegression
+		import numpy as np
+
+		ss13 = requests.get(f"https://ss13.qtqt.cf/api/global_stats?type=PLAYER_COUNT&grouping=DAY").json()
+		ss14 = requests.get(f"https://ss14.qtqt.cf/api/global_stats?type=PLAYER_COUNT&grouping=DAY").json()
+
+
+		x = list(range(len(ss13)))
+
+		r1 = LinearRegression().fit(np.array(x).reshape(-1, 1), np.asarray([x["value"] for x in ss13]).reshape(-1, 1))
+		r2 = LinearRegression().fit(np.array(x[-len(ss14):]).reshape(-1, 1), np.asarray([x["value"] for x in ss14]).reshape(-1, 1))
+
+		try:
+			intersection = (r2.intercept_[0] - r1.intercept_[0]) / (r1.coef_[0][0] - r2.coef_[0][0])
+			days_until_broken = intersection - len(x)
+
+			if intersection < 0:
+				days_until_broken = None
+			
+		except DivisionByZero:
+			days_until_broken = None
+
+		return jsonify({
+			"ss13": ss13,
+			"ss14": ss14,
+			"days_until_broken": days_until_broken
+		})
 
 
 class GlobalWeekdayAveragesResource(MethodResource):

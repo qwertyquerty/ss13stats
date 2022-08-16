@@ -184,19 +184,16 @@ class SS13ServerHourlyAveragesChart extends SS13GlobalHourlyAveragesChart {
 }
 
 
-
-
-class SS13FlippeningChart {
+class SS13CurseChart {
 	static chart_type = "line";
 	static trend_line = true;
 	static value_key = "value";
 
-	constructor(canvas_id, title0, title1, endpoint0, endpoint1) {
+	constructor(canvas_id, title0, title1, endpoint) {
 		this.canvas_id = canvas_id;
 		this.title0 = title0;
-		this.endpoint0 = endpoint0;
+		this.endpoint = endpoint;
 		this.title1 = title1;
-		this.endpoint1 = endpoint1;
 
 		let chart_options = {
 			type: this.constructor.chart_type,
@@ -251,59 +248,35 @@ class SS13FlippeningChart {
 	update() {
 		var stats_chart = this; // omg i love js scope
 
-		$.getJSON(this.generate_endpoint(this.endpoint0), function(data) {
-			stats_chart.load_data(0, data);
-		})
-
-		$.getJSON(this.generate_endpoint(this.endpoint1), function(data) {
-			stats_chart.load_data(1, data);
+		$.getJSON(this.generate_endpoint(), function(data) {
+			stats_chart.load_data(data);
 		})
 	}
 
-	load_data(dataset, data) {
-		this.chart.data.labels = data.map(entry => this.format_timestamp(entry.timestamp));
-		this.chart.data.datasets[dataset].data = data.map(entry => entry[this.constructor.value_key]);
+	load_data(data) {
+		this.chart.data.labels = data.ss13.map(entry => this.format_timestamp(entry.timestamp));
 
-		var limit;
-		if (time_window == "DAY") {
-			limit = 144;
-		} else if (time_window == "WEEK") {
-			limit = 168;
-		} else if (time_window == "MONTH") {
-			limit = 30;
-		} else if (time_window == "YEAR") {
-			limit = 12;
-		} else if (time_window == "ALL") {
-			limit = this.chart.data.labels.length;
+		this.chart.data.datasets[0].data = data.ss14.map(entry => entry[this.constructor.value_key]);
+		this.chart.data.datasets[1].data = data.ss13.map(entry => entry[this.constructor.value_key]);
+
+		var diff = this.chart.data.labels.length - this.chart.data.datasets[0].data.length;
+		for (var i = 0; i < diff; i++) {
+			this.chart.data.datasets[0].data.unshift(null);
 		}
 
-		var length_diff = limit - this.chart.data.datasets[dataset].data.length
-
-		for (var i = 0; i < length_diff; i++) {
-			this.chart.data.datasets[dataset].data.unshift(null);
+		var diff = this.chart.data.labels.length - this.chart.data.datasets[1].data.length;
+		for (var i = 0; i < diff; i++) {
+			this.chart.data.datasets[1].data.unshift(null);
 		}
 
 		this.chart.update();
+
+		$("#curse_prediction").text(data.days_until_broken ? `in ${data.days_until_broken} days.` : "never.")
 	}
 
 	format_timestamp(timestamp) {
 		var date = new Date(timestamp + 'Z'); // Z indicates UTC
-
-		if (time_window == "DAY") {
-			return date.toLocaleTimeString('en-US', {
-				hourCycle: 'h23'
-			}).slice(0, -3);
-		} else if (time_window == "WEEK") {
-			return date.toLocaleString('en-US', {
-				hourCycle: 'h23'
-			}).slice(0, -3).replace(",", "");
-		} else if (time_window == "MONTH") {
-			return date.toLocaleDateString('en-US', {timeZone: "UTC"});
-		} else if (time_window == "YEAR") {
-			return date.toLocaleString('en-US', { month: 'long', timeZone: "UTC"});
-		} else if (time_window == "ALL") {
-			return date.getUTCFullYear();
-		}
+		return date.toLocaleDateString('en-US', {timeZone: "UTC"});
 	}
 
 	clear() {
@@ -315,35 +288,7 @@ class SS13FlippeningChart {
 		this.chart.update();
 	}
 
-	generate_endpoint(base) {
-		var grouping;
-		var limit;
-
-		if (time_window == "DAY") {
-			limit = 144;
-		} else if (time_window == "WEEK") {
-			grouping = "HOUR";
-			limit = 168;
-		} else if (time_window == "MONTH") {
-			grouping = "DAY";
-			limit = 30;
-		} else if (time_window == "YEAR") {
-			grouping = "MONTH";
-			limit = 12;
-		} else if (time_window == "ALL") {
-			grouping = "YEAR"
-		}
-
-		var generated_endpoint = base;
-
-		if (grouping) {
-			generated_endpoint += `&grouping=${grouping}`;
-		}
-
-		if (limit) {
-			generated_endpoint += `&limit=${limit}`;
-		}
-
-		return generated_endpoint;
+	generate_endpoint() {
+		return this.endpoint;
 	}
 }

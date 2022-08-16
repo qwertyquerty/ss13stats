@@ -44,11 +44,6 @@
 </div>
 
 
-<div class="card">
-	<h2 class="card-title text-center">Breaking The Curse</h2>
-	<canvas id="flippening_chart" height="80px"></canvas>
-</div>
-
 <script>
 	new SS13StatsChart(
 		"global_player_count_chart",
@@ -72,14 +67,6 @@
 		"global_server_count_chart",
 		"Global Server Count",
 		"/api/global_stats?type=SERVER_COUNT"
-	)
-
-	new SS13FlippeningChart(
-		"flippening_chart",
-		"SS14 Player Count",
-		"SS13 Player Count",
-		"https://ss14.qtqt.cf/api/global_stats?type=PLAYER_COUNT",
-		"https://ss13.qtqt.cf/api/global_stats?type=PLAYER_COUNT"
 	)
 </script>
 

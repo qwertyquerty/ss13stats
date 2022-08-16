@@ -45,6 +45,10 @@ def hub_page():
 
 	return render_template("hub.html", servers=servers)
 
+@flask.route("/curse")
+def curse_page():
+	return render_template("curse.html")
+
 @flask.route("/hub/<int:server_id>")
 def server_page(server_id):
 	server = Server.query.get_or_404(server_id)
@@ -60,6 +64,7 @@ def after_request(response):
 rest_ext.add_resource(ServerListResource, "/api/servers")
 rest_ext.add_resource(ServerStatsResource, "/api/server_stats")
 rest_ext.add_resource(GlobalStatsResource, "/api/global_stats")
+rest_ext.add_resource(CurseResource, "/api/curse")
 rest_ext.add_resource(SummaryResource, "/api/summary")
 rest_ext.add_resource(GlobalWeekdayAveragesResource, "/api/global_weekdays")
 rest_ext.add_resource(ServerWeekdayAveragesResource, "/api/server_weekdays")
