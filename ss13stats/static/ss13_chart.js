@@ -195,7 +195,7 @@ class SS13FlippeningChart {
 		this.canvas_id = canvas_id;
 		this.title0 = title0;
 		this.endpoint0 = endpoint0;
-		this.titke1 = title1;
+		this.title1 = title1;
 		this.endpoint1 = endpoint1;
 
 		let chart_options = {
@@ -211,7 +211,7 @@ class SS13FlippeningChart {
 				{
 					label: this.title1,
 					data: [],
-					borderColor: "#0000ffaa",
+					borderColor: "#00ffffaa",
 					borderWidth: 2
 				}]
 			},
@@ -263,6 +263,26 @@ class SS13FlippeningChart {
 	load_data(dataset, data) {
 		this.chart.data.labels = data.map(entry => this.format_timestamp(entry.timestamp));
 		this.chart.data.datasets[dataset].data = data.map(entry => entry[this.constructor.value_key]);
+
+		var limit;
+		if (time_window == "DAY") {
+			limit = 144;
+		} else if (time_window == "WEEK") {
+			limit = 168;
+		} else if (time_window == "MONTH") {
+			limit = 30;
+		} else if (time_window == "YEAR") {
+			limit = 12;
+		} else if (time_window == "ALL") {
+			limit = this.chart.data.labels.length;
+		}
+
+		var length_diff = limit - this.chart.data.datasets[dataset].data.length
+
+		for (var i = 0; i < length_diff; i++) {
+			this.chart.data.datasets[dataset].data.unshift(null);
+		}
+
 		this.chart.update();
 	}
 
@@ -288,7 +308,7 @@ class SS13FlippeningChart {
 
 	clear() {
 		this.chart.data.labels = [];
-		for (dataset in this.chart.data.datasets) {
+		for (var dataset in this.chart.data.datasets) {
 			this.chart.data.datasets[dataset].data = [];
 		}
 		
