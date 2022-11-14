@@ -14,7 +14,7 @@ from webargs.flaskparser import parser
 flask = Flask(__name__)
 
 flask.config.update({
-    "SQLALCHEMY_DATABASE_URI": f"mysql+mysqlconnector://{cfg.get('db.user')}:{cfg.get('db.pass')}@{cfg.get('db.host')}:{cfg.get('db.port')}/{cfg.get('db.name')}",
+    "SQLALCHEMY_DATABASE_URI": f"mysql+mysqlconnector://{cfg.get('db.user')}:{cfg.get('db.pass')}@{cfg.get('db.host')}:{cfg.get('db.port')}/{cfg.get('db.name')}?charset=utf8mb4",
 })
 
 db_ext = SQLAlchemy(flask)
