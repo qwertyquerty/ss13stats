@@ -23,38 +23,11 @@ for server in Server.query.all():
 
 for game in live_games:
 	addr = game["address"]
-	title = game["name"]
-
-	parse = urllib.parse.urlparse(addr)
-
-	if parse.scheme == "ss14s":
-		scheme = "https"
-	elif parse.scheme == "ss14":
-		scheme = "http"
-
-	http_addr = urllib.parse.ParseResult(
-		scheme=scheme,
-		netloc=parse.netloc if parse.port else f"{parse.netloc}:{SS14_DEFAULT_PORT if scheme == 'http' else 443}",
-		path=parse.path,
-		params=None,
-		query=parse.query,
-		fragment=None
-	).geturl()
-
-	online = 0
-
-	try:
-		status_url = http_addr.rstrip("/") + "/status"
-
-		game_stats = requests.get(status_url, timeout=2).json()
-		
-		if game_stats:
-			title = game_stats["name"]
-			player_count = game_stats["players"]
-			online = 1
-	
-	except:
-		pass
+	title = game["statusData"]["name"]
+	game_stats = game["statusData"]
+	title = game_stats["name"]
+	player_count = game_stats["players"]
+	online = 1
 
 	server = Server.from_address(game["address"])
 
