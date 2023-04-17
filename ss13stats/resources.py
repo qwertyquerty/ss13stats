@@ -61,9 +61,6 @@ class CurseResource(MethodResource):
 		try:
 			intersection = (r2.intercept_[0] - r1.intercept_[0]) / (r1.coef_[0][0] - r2.coef_[0][0])
 			days_until_broken = int(round(intersection - len(x), 0))
-
-			if intersection < 0:
-				days_until_broken = None
 			
 		except DivisionByZero:
 			days_until_broken = None
